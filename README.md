@@ -16,6 +16,8 @@ npm i line-file-reader
 
 You can simply use it with the ES2018 async iterator.
 
+### Simple usage
+
 ```ts
 import LineFileReader from 'line-file-reader';
 
@@ -24,5 +26,20 @@ const reader = new LineFileReader(file);
 
 for await (const line of reader) {
   console.log(line);
+}
+```
+
+### Multiple iteration
+
+You can iterate *multiple times*, and *concurrently* on the same file.
+
+```ts
+for await (const line of reader) {
+  // Do something with line..
+  // Read the file during file read
+
+  for await (const line_second of reader) {
+    // do this action is safe!
+  }
 }
 ```
