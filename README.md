@@ -43,3 +43,26 @@ for await (const line of reader) {
   }
 }
 ```
+
+### Customize iteration
+
+By default, iteration is made with the `\n` separator (UNIX new lines), using chunks of 1024 bytes.
+
+You can customize those settings by using the `.iterate()` method (`Symbol.asyncIterator` is just an alias of `.iterate` without arguments).
+
+```ts
+const reader = new LineFileReader(file);
+
+const async_iterator = reader.iterate(
+  // Here, you can use string or RegExp objects.
+  /* separator = */ '\n',
+
+  // This is only a parameter to adjust for performance sake (in bytes).
+  // Higher length = higher performance = higher RAM consumption
+  /* chunk_length = */ 1024
+);
+
+for await (const line of async_iterator) {
+  // Do sth with line...
+}
+```

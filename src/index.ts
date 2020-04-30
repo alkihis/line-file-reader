@@ -22,16 +22,16 @@ export class LineFileReader {
   }
 
   /** Iterate a file line by line */
-  async *[Symbol.asyncIterator]() {
+  async *iterate(separator: string | RegExp = '\n', chunk_length = LineFileReader.CHUNK_LENGTH) {
     let seeker = 0;
     let buffer = "";
     
     // While we didn't reach the end of file
     while (seeker < this.file.size) {
-      const part = await this.file.slice(seeker, seeker + LineFileReader.CHUNK_LENGTH).text();
-      seeker += LineFileReader.CHUNK_LENGTH;
+      const part = await this.file.slice(seeker, seeker + chunk_length).text();
+      seeker += chunk_length;
   
-      const parts = part.split('\n');
+      const parts = part.split(separator);
 
       if (parts.length > 1) { 
         // There is a next line
@@ -53,6 +53,11 @@ export class LineFileReader {
     if (buffer) {
       yield buffer;
     }
+  }
+
+  /** Iterate a file line by line */
+  async *[Symbol.asyncIterator]() {
+    yield* this.iterate();
   }
 }
 
