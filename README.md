@@ -55,7 +55,7 @@ You can customize those settings by using the `.iterate()` method (`Symbol.async
 
 **A warning about using `RegExp` as separator**: Data is retrieved with byte chunks: 
 If you use regex that matches things of more than one byte,
-separated presents at the end/start of a chunk can be incorrectly matched. 
+patterns positionned at the end/start of a chunk can be incorrectly matched. 
 It is recommanded to use `RegExp` objects only to do “or” conditions, like `\n|\r\n|\r`.
 
 ```ts
