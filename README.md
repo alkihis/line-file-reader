@@ -2,6 +2,8 @@
 
 > Modern line-by-line `File` reader
 
+Easily read `File` or `Blob` objects line by line.
+
 ## Getting started
 
 Install it using NPM.
