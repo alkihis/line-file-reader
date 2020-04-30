@@ -1,3 +1,9 @@
+if (typeof Symbol.asyncIterator === undefined) {
+  // Create the symbol async iterator if it is undefined
+  // @ts-ignore
+  Symbol.asyncIterator = Symbol('Symbol.asyncIterator');
+}
+
 export class LineFileReader {
   /** Read by chunks of 1 KB of text */
   protected static readonly CHUNK_LENGTH = 1024;
