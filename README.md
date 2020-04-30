@@ -16,6 +16,9 @@ npm i line-file-reader
 
 You can simply use it with the ES2018 async iterator.
 
+Please be warned that line separator (default: `\n`) will **not** be returned in iterated lines.
+To customize line separator, see `Customize iteration` part.
+
 ### Simple usage
 
 ```ts
