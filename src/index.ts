@@ -22,18 +22,43 @@ export class LineFileReader {
   }
 
   /** Iterate a file line by line */
-  async *iterate(separator: string | RegExp = '\n', chunk_length = LineFileReader.CHUNK_LENGTH) {
+  async *iterate(separator = '\n', chunk_length = LineFileReader.CHUNK_LENGTH) {
     let seeker = 0;
     let buffer = "";
+    let padding = separator.length - 1;
+
+    if (separator.length + 1 >= chunk_length) {
+      throw new Error("Separator must be shorter than chunk length.");
+    }
+
+    if (padding === -1) {
+      padding = 0;
+    }
     
     // While we didn't reach the end of file
     while (seeker < this.file.size) {
-      const part = await this.file.slice(seeker, seeker + chunk_length).text();
+      const part = await this.file.slice(seeker, seeker + chunk_length + padding).text();
       seeker += chunk_length;
   
       const parts = part.split(separator);
 
       if (parts.length > 1) { 
+        if (padding && part.length > chunk_length) {
+          // There can be an overlap
+          const last_index = parts.length - 1;
+          const last_len = parts[last_index].length;
+
+          if (parts[last_index].length < padding) {
+            // There is an overlap !
+            seeker += padding - last_len;
+            parts[last_index] = "";
+          }
+          else {
+            // There is no overlap, ignoring
+            parts[last_index] = parts[last_index].slice(0, last_len - padding);
+          }
+        }
+
         // There is a next line
         parts[0] = buffer + parts[0];
         // Store the remaining line in the buffer
@@ -45,7 +70,7 @@ export class LineFileReader {
       }
       else {
         // There is no next line here. Save the whole chunk in the buffer.
-        buffer += part;
+        buffer += part.slice(0, chunk_length);
       }
     }
 
