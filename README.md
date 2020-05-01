@@ -53,16 +53,11 @@ By default, iteration is made with the `\n` separator (UNIX new lines), using ch
 
 You can customize those settings by using the `.iterate()` method (`Symbol.asyncIterator` is just an alias of `.iterate` without arguments).
 
-**A warning about using `RegExp` as separator**: Data is retrieved with byte chunks: 
-If you use regex that matches things of more than one byte,
-patterns positionned at the end/start of a chunk can be incorrectly matched. 
-It is recommanded to use `RegExp` objects only to do “or” conditions, like `\n|\r`.
-
 ```ts
 const reader = new LineFileReader(file);
 
 const async_iterator = reader.iterate(
-  // Here, you can use string or RegExp objects.
+  // Here, you can use string, even of multiple characters.
   /* separator = */ '\n',
 
   // This is only a parameter to adjust for performance sake (in bytes).
