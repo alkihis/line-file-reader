@@ -21,6 +21,24 @@ export class LineFileReader {
     return false;
   }
 
+  protected getText(file: Blob) {
+    if ('text' in file) {
+      return file.text();
+    }
+
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader;
+
+      fr.onload = () => {
+        resolve(fr.result as string);
+      };
+
+      fr.onerror = reject;
+
+      fr.readAsText(file);
+    }) as Promise<string>;
+  }
+
   /** Iterate a file line by line */
   async *iterate(separator = '\n', chunk_length = LineFileReader.CHUNK_LENGTH) {
     let seeker = 0;
@@ -37,7 +55,7 @@ export class LineFileReader {
     
     // While we didn't reach the end of file
     while (seeker < this.file.size) {
-      const part = await this.file.slice(seeker, seeker + chunk_length + padding).text();
+      const part = await this.getText(this.file.slice(seeker, seeker + chunk_length + padding));
       seeker += chunk_length;
   
       const parts = part.split(separator);
