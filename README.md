@@ -12,6 +12,8 @@ Install it using NPM.
 npm i line-file-reader
 ```
 
+You can also find a JS file that you can copy and use in `<script>` tags in `stub/browser.js`.
+
 ## Usage
 
 You can simply use it with the ES2018 async iterator.
